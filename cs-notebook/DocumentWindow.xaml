@@ -59,17 +59,17 @@
         </Menu>
         <ToolBarTray Height="40">
             <ToolBar>
-                <Button Height="40" Width="40">
-                    <Image  Width="40" Height="40" Source="open-file-icon.png"></Image>
+                <Button Width="40" Height="40">
+                    <Image Width="40" Height="40" Source="openfile-icon.png"></Image>
                 </Button>
-                <Button Height="40" Width="40">
-                    <Image Source="save-file-icon.png" Width="40" Height="40"></Image>
+                <Button Width="40" Height="40">
+                    <Image Width="40" Height="40"></Image>
                 </Button>
-                <Button Height="40" Width="40">
-                    <Image Source="save-file-icon.png" Width="40" Height="40"></Image>
+                <Button Width="40" Height="40">
+                    <Image Width="40" Height="40"></Image>
                 </Button>
-                <Button Height="40" Width="40">
-                    <Image  Width="40" Height="40" Source="select-font-icon.png"></Image>
+                <Button Width="40" Height="40">
+                    <Image Width="40" Height="40"></Image>
                 </Button>
             </ToolBar>
         </ToolBarTray>

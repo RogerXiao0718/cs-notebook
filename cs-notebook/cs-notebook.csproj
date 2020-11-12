@@ -111,13 +111,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="open-file-icon.png" />
+    <Resource Include="baseline_description_black_18dp.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="save-file-icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="select-font-icon.png" />
+    <Resource Include="openfile-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
