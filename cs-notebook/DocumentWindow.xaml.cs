@@ -28,22 +28,41 @@ namespace cs_notebook
         string currFilePath = "";
         bool isBold = false;
         bool isItalic = false;
+        
 
         public DocumentWindow()
         {
             InitializeComponent();
+            EnumerateSystemFontFamilies();
         }
+
+        private void EnumerateSystemFontFamilies()
+        {
+            List<Media.FontFamily> fontFamilies = new List<Media.FontFamily>();
+            foreach (var fontfamily in Media.Fonts.SystemFontFamilies)
+            {
+                fontFamilies.Add(fontfamily);
+            }
+            fontComboBox.ItemsSource = fontFamilies;
+
+        }
+
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             OpenFileDialog filedialog = new OpenFileDialog()
             {
-                Filter = "文字檔(*.txt)|*.txt|所有檔案|*.*",
+                Filter = "rtf檔案(*.rtf)|*.rtf|所有檔案|*.*",
             };
             if (filedialog.ShowDialog() == true)
             {
-                this.currFilePath = filedialog.FileName;
+                using (FileStream fs = new FileStream(filedialog.FileName, FileMode.Open))
+                {
+                    TextRange range = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
+                    range.Load(fs, DataFormats.Rtf);
+                }
                 this.Title = filedialog.SafeFileName;
-                textBox.Text = File.ReadAllText(filedialog.FileName, Encoding.Default);
+                this.currFilePath = filedialog.FileName;
+               
             }
 
         }
@@ -54,20 +73,27 @@ namespace cs_notebook
             {
                 SaveFileDialog filedialog = new SaveFileDialog()
                 {
-                    Filter = "文字檔(*.txt)|*.txt|所有檔案|*.*"
+                    Filter = "rtf檔案(*.rtf)|*.rtf|所有檔案|*.*"
                 };
                 if (filedialog.ShowDialog() == true)
                 {
-                    using (StreamWriter sw = new StreamWriter(filedialog.FileName, false, Encoding.Default))
+                    currFilePath = filedialog.FileName;
+                    using (FileStream fs = new FileStream(filedialog.FileName, FileMode.Create))
                     {
-                        sw.WriteLine(textBox.Text);
+
+                        TextRange range = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
+
+                        range.Save(fs, DataFormats.Rtf);
+
                     }
+                    this.currFilePath = filedialog.FileName;
                 }
             } else
             {
-                using (StreamWriter sw = new StreamWriter(currFilePath, false, Encoding.Default))
+                using (FileStream fs = new FileStream(currFilePath, FileMode.Create))
                 {
-                    sw.WriteLine(textBox.Text);
+                    TextRange range = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
+                    range.Save(fs, DataFormats.Rtf);
                 }
             }
         }
@@ -76,13 +102,16 @@ namespace cs_notebook
         {
             SaveFileDialog filedialog = new SaveFileDialog()
             {
-                Filter = "文字檔(*.txt)|*.txt|所有檔案|*.*"
+                Filter = "rtf檔案(*.rtf)|*.rtf|所有檔案|*.*"
             };
             if (filedialog.ShowDialog() == true)
             {
-                using (StreamWriter sw = new StreamWriter(filedialog.FileName, false, Encoding.Default))
+                currFilePath = filedialog.FileName;
+                using (FileStream fs = new FileStream(filedialog.FileName, FileMode.Create))
                 {
-                    sw.WriteLine(textBox.Text);
+                    TextRange range = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
+                    range.Save(fs, DataFormats.Rtf);
+
                 }
             }
         }
@@ -104,7 +133,7 @@ namespace cs_notebook
             PrintDialog printDialog = new PrintDialog();
             if (printDialog.ShowDialog() == true)
             {
-                string text = textBox.Text;
+                //string text = richTextBox.Text;
                 
             }
         }
@@ -127,6 +156,15 @@ namespace cs_notebook
                 var color = Media.Color.FromArgb(selectedColor.R, selectedColor.G, selectedColor.B, selectedColor.A);
                 if (selectedFont.Italic == true) isItalic = !isItalic; //FontStyle fontstyle = Fontstyles.Italic;
                 if (selectedFont.Bold == true) isBold = !isBold; // FontWeight fontweight = FontWeights.Bold;
+            }
+        }
+
+        private void fontComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedTextValue = richTextBox.Selection;
+            if (!selectedTextValue.IsEmpty)
+            {
+                selectedTextValue.ApplyPropertyValue(FontFamilyProperty, fontComboBox.SelectedItem as Media.FontFamily);
             }
         }
     }

@@ -111,10 +111,37 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="baseline_description_black_18dp.png" />
+    <Resource Include="font-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="savefile-icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="openfile-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bold-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="italic-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="alignjustify-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="rightalign-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="centeralign-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="leftalign-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="undo-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="redo-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
