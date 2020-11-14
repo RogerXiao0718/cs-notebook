@@ -78,6 +78,7 @@
     <Compile Include="DocumentWindow.xaml.cs">
       <DependentUpon>DocumentWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IntToPxStringConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -142,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="redo-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="underline-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

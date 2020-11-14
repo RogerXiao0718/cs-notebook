@@ -5,58 +5,77 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:cs_notebook"
         mc:Ignorable="d"
-        Title="NoteBook" Height="520" Width="800">
+        Title="NoteBook" Height="680" Width="900">
+    <Window.Resources>
+        <!--讓其他元件可以透過StaticResource來取得IntToPxStringConverter-->
+        <!--IntToPxStringConverter定義在./IntToPxStringConverter.cs-->
+        <local:IntToPxStringConverter x:Key="IntToPxStringConverter" />
+    </Window.Resources>
     <Window.CommandBindings>
+        <!--這個程式要用到的一些ApplicationCommands-->
         <CommandBinding Command="ApplicationCommands.Open" Executed="Open_Executed" />
         <CommandBinding Command="ApplicationCommands.Save" Executed="Save_Executed" />
         <CommandBinding Command="ApplicationCommands.SaveAs" Executed="SaveAs_Executed" />
         <CommandBinding Command="ApplicationCommands.New" Executed="New_Executed" />
-        <CommandBinding Command="ApplicationCommands.Print" Executed="Print_Executed" />
         <CommandBinding Command="ApplicationCommands.Close" Executed="Close_Executed"/>
     </Window.CommandBindings>
     <StackPanel>
         <Menu Height="20">
             <MenuItem Header="檔案">
-                <MenuItem x:Name="newWindowItem" Header="新增視窗" Command="ApplicationCommands.New"></MenuItem>
+                <MenuItem Header="新增視窗" Click="NewWindowClicked"></MenuItem>
+                <MenuItem Header="開啟新檔" Command="ApplicationCommands.New"></MenuItem>
                 <MenuItem Header="開啟舊檔" Command="ApplicationCommands.Open"></MenuItem>
                 <MenuItem Header="儲存檔案" Command="ApplicationCommands.Save"></MenuItem>
                 <MenuItem Header="另存為..." Command="ApplicationCommands.SaveAs"></MenuItem>
-                <Separator></Separator>
-                <MenuItem Header="版面設定"></MenuItem>
-                <MenuItem Header="列印" Command="ApplicationCommands.Print"></MenuItem>
                 <Separator />
                 <MenuItem x:Name="closeItem" Header="結束" Command="ApplicationCommands.Close"></MenuItem>
             </MenuItem>
             <MenuItem Header="編輯">
+                <!--Undo和Redo還有其他編輯功能直接透過ApplicationCommands就可以實現-->
                 <MenuItem Header="復原"  Command="ApplicationCommands.Undo"></MenuItem>
                 <MenuItem Header="取消復原"  Command="ApplicationCommands.Redo"></MenuItem>
                 <Separator />
                 <MenuItem Header="剪下" Command="ApplicationCommands.Cut"></MenuItem>
                 <MenuItem Header="複製" Command="ApplicationCommands.Copy"></MenuItem>
                 <MenuItem Header="貼上" Command="ApplicationCommands.Paste"></MenuItem>
-                <Separator />
-                <MenuItem Header="尋找"></MenuItem>
-                <MenuItem Header="找下一個"></MenuItem>
-                <MenuItem Header="尋找上一個"></MenuItem>
-                <MenuItem Header="取代"></MenuItem>
-                <MenuItem Header="移至"></MenuItem>
-                <Separator />
-                <MenuItem Header="全選"></MenuItem>
-                <MenuItem Header="日期/時間"></MenuItem>
+                <MenuItem Header="全選" Command="ApplicationCommands.SelectAll"></MenuItem>
+                <MenuItem Header="清除全部"></MenuItem>
             </MenuItem>
             <MenuItem Header="格式">
-                <CheckBox Content="自動換行"></CheckBox>
-                <MenuItem x:Name="fontSelectMenuItem" Header="字型" Click="fontSelectMenuItem_Click"></MenuItem>
+                <MenuItem x:Name="fontSelectMenuItem" Header="字型">
+                    <ComboBox Width="200" Height="20" Padding="0" FontSize="12" 
+                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                              ItemsSource="{Binding ItemsSource, ElementName=fontComboBox}"
+                              SelectedItem="{Binding SelectedItem, ElementName=fontComboBox}"
+                              SelectionChanged="fontComboBox_SelectionChanged" ></ComboBox>
+                </MenuItem>
+                <MenuItem Header="文字大小">
+                    <ComboBox ItemsSource="{Binding ItemsSource, ElementName=fontSizeComboBox}"
+                              Width="80" Height="20" FontSize="12"
+                              SelectedItem="{Binding SelectedItem, ElementName=fontSizeComboBox}"
+                              SelectionChanged="fontSizeComboBox_SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource IntToPxStringConverter}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </MenuItem>
+                <MenuItem Header="文字顏色" Background="{Binding Background, ElementName=fontColorBtn}" 
+                          Click="fontColorBtn_Click"/>
+                <Separator />
+                <MenuItem Header="粗體" Command="EditingCommands.ToggleBold" />
+                <MenuItem Header="斜體" Command="EditingCommands.ToggleItalic" />
+                <MenuItem Header="底線" Command="EditingCommands.ToggleUnderline" />
+                <Separator />
+                <MenuItem Header="向左對齊" Command="EditingCommands.AlignLeft" InputGestureText="Ctrl+L" />
+                <MenuItem Header="置中對齊" Command="EditingCommands.AlignCenter" InputGestureText="Ctrl+E"/>
+                <MenuItem Header="向右對齊" Command="EditingCommands.AlignRight" InputGestureText="Ctrl+R"/>
+                <MenuItem Header="兩端對齊" Command="EditingCommands.AlignJustify" InputGestureText="Ctrl+J"/>
             </MenuItem>
             <MenuItem Header="檢視">
-                <MenuItem Header="縮放">
-                    <MenuItem Header="放大"></MenuItem>
-                    <MenuItem Header="縮小"></MenuItem>
-                    <MenuItem Header="還原預設縮放"></MenuItem>
-                </MenuItem>
-                <MenuItem Header="狀態列"></MenuItem>
+                <MenuItem x:Name="backgroundBtn" Header="背景顏色" Background="{Binding Background, ElementName=richTextBox}" Click="backgroundBtn_Click"/>
             </MenuItem>
-            <MenuItem Header="說明" Height="20"></MenuItem>
         </Menu>
         <ToolBarTray Height="40">
             <ToolBar>
@@ -74,7 +93,22 @@
                 <Button Width="40" Height="40" Command="EditingCommands.ToggleItalic" ToolTip="斜體">
                     <Image Width="40" Height="40" Source="italic-icon.png" />
                 </Button>
+                <Button Width="40" Height="40" Command="EditingCommands.ToggleUnderline" ToolTip="底線">
+                    <Image Width="40" Height="40" Source="underline-icon.png" />
+                </Button>
+                <Button x:Name="fontColorBtn" Width="40" Height="40" FontSize="24" VerticalAlignment="Bottom" Click="fontColorBtn_Click">
+                    A
+                </Button>
                 <ComboBox x:Name="fontComboBox" Width="200" Height="30" SelectedIndex="0" DisplayMemberPath="Source" SelectionChanged="fontComboBox_SelectionChanged" />
+                <ComboBox x:Name="fontSizeComboBox" Width="80" Height="30"
+                          SelectedIndex="0" SelectionChanged="fontSizeComboBox_SelectionChanged">
+                    <!--參考 https://stackoverflow.com/questions/9448862/use-converter-on-bound-items-in-combobox-->
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource IntToPxStringConverter}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </ToolBar>
             <ToolBar>
                 <Button Width="40" Height="40" Command="ApplicationCommands.Undo">
@@ -99,8 +133,11 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
-        <RichTextBox x:Name="richTextBox" Padding="0,5"  FontSize="16" Height="400" Margin="0,0,0,0" Background="#FFEAC3B8" />
-        <StatusBar x:Name="statusBar" Height="30">
+        <RichTextBox x:Name="richTextBox" Padding="0,5" Block.LineHeight="4" FontSize="16" 
+                     Height="550" Margin="0,0,0,0" Background="#FFEAC3B8"
+                     SelectionChanged="richTextBox_SelectionChanged" />
+        <StatusBar x:Name="statusBar" Height="30" VerticalContentAlignment="Center">
+            <Label x:Name="statusLbl" FontSize="12" Margin="500,0,0,0"></Label>
         </StatusBar>
     </StackPanel>
 </Window>
