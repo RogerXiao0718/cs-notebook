@@ -192,6 +192,12 @@ namespace cs_notebook
             this.currFilePath = "";
         }
 
+        private void clearAllMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var range = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
+            range.Text = "";
+        }
+
         private void fontComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selection = richTextBox.Selection;
@@ -215,8 +221,6 @@ namespace cs_notebook
                 var choosedColor = dialog.Color;
                 currFontBrush = new Media.SolidColorBrush(Media.Color.FromArgb(choosedColor.A, choosedColor.R, choosedColor.G, choosedColor.B));
                 richTextBox.Selection.ApplyPropertyValue(ForegroundProperty, currFontBrush);
-                //連richTextBox的指標筆刷都要改變才能夠讓之後打出來的字也能套用所選取的顏色
-                richTextBox.CaretBrush = currFontBrush; 
                 fontColorBtn.Background = currFontBrush;
             }
         }
@@ -234,7 +238,7 @@ namespace cs_notebook
             }
         }
 
-        
+
     }
 
 }

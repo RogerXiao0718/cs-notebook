@@ -39,7 +39,7 @@
                 <MenuItem Header="複製" Command="ApplicationCommands.Copy"></MenuItem>
                 <MenuItem Header="貼上" Command="ApplicationCommands.Paste"></MenuItem>
                 <MenuItem Header="全選" Command="ApplicationCommands.SelectAll"></MenuItem>
-                <MenuItem Header="清除全部"></MenuItem>
+                <MenuItem x:Name="clearAllMenuItem" Header="清除全部" Click="clearAllMenuItem_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="格式">
                 <MenuItem x:Name="fontSelectMenuItem" Header="字型">
@@ -87,6 +87,14 @@
                 </Button>
             </ToolBar>
             <ToolBar>
+                <Button Width="40" Height="40" Command="ApplicationCommands.Undo">
+                    <Image Width="40" Height="40" Source="undo-icon.png" ToolTip="還原"/>
+                </Button>
+                <Button Width="40" Height="40" Command="ApplicationCommands.Redo">
+                    <Image Width="40" Height="40" Source="redo-icon.png" ToolTip="取消還原"/>
+                </Button>
+            </ToolBar>
+            <ToolBar>
                 <Button Width="40" Height="40" Command="EditingCommands.ToggleBold" ToolTip="粗體">
                     <Image Width="40" Height="40" Source="bold-icon.png" />
                 </Button>
@@ -109,14 +117,6 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-            </ToolBar>
-            <ToolBar>
-                <Button Width="40" Height="40" Command="ApplicationCommands.Undo">
-                    <Image Width="40" Height="40" Source="undo-icon.png" ToolTip="還原"/>
-                </Button>
-                <Button Width="40" Height="40" Command="ApplicationCommands.Redo">
-                    <Image Width="40" Height="40" Source="redo-icon.png" ToolTip="取消還原"/>
-                </Button>
             </ToolBar>
             <ToolBar>
                 <Button Width="40" Height="40" Command="EditingCommands.AlignLeft" ToolTip="向左對齊">
